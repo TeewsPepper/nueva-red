@@ -276,7 +276,7 @@ export const IglesiaDashboard = () => {
 
       <div className="dashboard-content">
         {/* Stats */}
-        <section className="stats-grid">
+        {/* <section className="stats-grid">
           <div className="stat-card">
             <span className="stat-number">{ministerios.length}</span>
             <span className="stat-label">Ministerios</span>
@@ -301,7 +301,7 @@ export const IglesiaDashboard = () => {
             <span className="stat-number">{actividades.length}</span>
             <span className="stat-label">Actividades</span>
           </div>
-        </section>
+        </section> */}
 
         {/* Role indicator */}
         <div className="role-indicator">
