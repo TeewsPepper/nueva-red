@@ -1,0 +1,242 @@
+/* ========================================
+   TAREAITEM.CSS
+   ======================================== */
+
+.tarea-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tarea-item:hover {
+  border-color: #c9a84c;
+  background: #fefdf8;
+}
+
+.tarea-item.completada {
+  opacity: 0.6;
+  background: #f3f4f6;
+}
+
+.tarea-item.completada .tarea-titulo {
+  text-decoration: line-through;
+}
+
+/* ====== MAIN ====== */
+.tarea-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.tarea-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tarea-titulo {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #16213e;
+}
+
+.tarea-prioridad {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.prioridad-baja {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.prioridad-media {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.prioridad-alta {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tarea-detalles {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tarea-detalles span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.tarea-detalles .icon {
+  color: #9ca3af;
+}
+
+/* ====== ACTIONS ====== */
+.tarea-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.tarea-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.btn-completar {
+  color: #10b981;
+}
+
+.btn-completar:hover {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.btn-edit {
+  color: #3b82f6;
+}
+
+.btn-edit:hover {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.btn-delete {
+  color: #ef4444;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.tarea-completada-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #10b981;
+  background: #d1fae5;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .tarea-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .tarea-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .tarea-item {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .tarea-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .tarea-detalles {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .tarea-actions {
+    justify-content: flex-start;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .tarea-item {
+    background: #0f0f1a;
+    border-color: #2a2a4a;
+  }
+
+  .tarea-item:hover {
+    background: #1a1a2e;
+    border-color: #c9a84c;
+  }
+
+  .tarea-item.completada {
+    background: #0a0a14;
+  }
+
+  .tarea-titulo {
+    color: #e5e7eb;
+  }
+
+  .tarea-detalles span {
+    color: #9ca3af;
+  }
+
+  .tarea-actions button:hover {
+    background: #2a2a4a;
+  }
+
+  .btn-completar:hover {
+    background: #1a3a2a;
+  }
+
+  .btn-edit:hover {
+    background: #1a2a4a;
+  }
+
+  .btn-delete:hover {
+    background: #3a1a1a;
+  }
+
+  .tarea-completada-badge {
+    background: #1a3a2a;
+  }
+
+  .tarea-item .tarea-actions {
+    border-top-color: #2a2a4a;
+  }
+}

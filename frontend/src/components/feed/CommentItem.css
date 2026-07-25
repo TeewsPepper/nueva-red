@@ -1,0 +1,202 @@
+/* ========================================
+   COMMENT ITEM - CONSISTENTE
+   ======================================== */
+
+.comment-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  transition: all 0.2s ease;
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+/* ====== AVATAR ====== */
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c9a84c, #b8960f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16213e;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.comment-avatar svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ====== CONTENIDO ====== */
+.comment-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.15rem;
+}
+
+.comment-author {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #16213e;
+}
+
+.comment-date {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  color: #9ca3af;
+}
+
+.comment-text {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0.1rem 0 0.25rem 0;
+  word-break: break-word;
+}
+
+/* ====== ACCIONES ====== */
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+.comment-like {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.comment-like:hover {
+  background: #f3f4f6;
+  color: #ef4444;
+}
+
+.comment-like.liked {
+  color: #ef4444;
+}
+
+.comment-like.liked:hover {
+  background: #fef2f2;
+}
+
+.comment-like svg {
+  transition: transform 0.2s ease;
+}
+
+.comment-like:hover svg {
+  transform: scale(1.1);
+}
+
+.comment-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.comment-delete:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.comment-delete svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .comment-item {
+    gap: 0.5rem;
+    padding: 0.4rem 0;
+  }
+
+  .comment-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .comment-avatar svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .comment-author {
+    font-size: 0.8rem;
+  }
+
+  .comment-text {
+    font-size: 0.8rem;
+  }
+
+  .comment-date {
+    font-size: 0.6rem;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .comment-item {
+    border-bottom-color: #1a1a2e;
+  }
+
+  .comment-author {
+    color: #e5e7eb;
+  }
+
+  .comment-text {
+    color: #9ca3af;
+  }
+
+  .comment-like {
+    color: #9ca3af;
+  }
+
+  .comment-like:hover {
+    background: #2a2a4a;
+  }
+
+  .comment-like.liked {
+    color: #ef4444;
+  }
+
+  .comment-like.liked:hover {
+    background: #2a1a1a;
+  }
+
+  .comment-delete:hover {
+    background: #2a1a1a;
+  }
+}

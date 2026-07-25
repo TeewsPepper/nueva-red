@@ -1,0 +1,113 @@
+.notification-list { max-height: 500px; overflow-y: auto; }
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #16213e;
+}
+
+.btn-mark-all {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btn-mark-all:hover { background: #f3f4f6; color: #16213e; }
+
+.notification-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9ca3af;
+}
+
+.notification-empty svg { margin-bottom: 0.5rem; opacity: 0.5; }
+.notification-empty p { margin: 0; font-size: 0.875rem; }
+
+.notification-items { padding: 0.25rem 0; }
+
+.notification-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  align-items: flex-start;
+}
+
+.notification-item:hover { background: #f9fafb; }
+.notification-item.unread { background: #f0f7ff; }
+.notification-item.unread:hover { background: #e8f0fe; }
+
+.notification-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+.notification-content { flex: 1; min-width: 0; }
+
+.notification-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #16213e;
+}
+
+.notification-message {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.1rem;
+}
+
+.notification-date {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  margin-top: 0.2rem;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  flex-shrink: 0;
+  margin-top: 0.3rem;
+}
+
+.notification-loading {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .notification-header {
+    background: #1a1a2e;
+    border-bottom-color: #2a2a4a;
+  }
+  .notification-header h3 { color: #e5e7eb; }
+  .btn-mark-all { color: #9ca3af; }
+  .btn-mark-all:hover { background: #2a2a4a; color: #e5e7eb; }
+  .notification-item:hover { background: #2a2a4a; }
+  .notification-item.unread { background: #1a2a4a; }
+  .notification-item.unread:hover { background: #1a3a5a; }
+  .notification-title { color: #e5e7eb; }
+  .notification-message { color: #9ca3af; }
+}

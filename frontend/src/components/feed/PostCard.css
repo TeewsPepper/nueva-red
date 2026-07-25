@@ -1,0 +1,306 @@
+/* ========================================
+   POST CARD
+   ======================================== */
+
+.post-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* ====== HEADER ====== */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.post-author {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c9a84c, #b8960f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16213e;
+  flex-shrink: 0;
+}
+
+.post-author-info h4 {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #16213e;
+}
+
+.post-role {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.1rem 0.5rem;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.post-date {
+  display: block;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 0.15rem;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+/* ====== CONTENIDO ====== */
+.post-content {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #16213e;
+  margin: 0 0 0.75rem 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.post-image {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.post-image img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ====== ACCIONES ====== */
+.post-actions {
+  display: flex;
+  gap: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-like,
+.btn-comment {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-like:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.btn-like.liked {
+  color: #ef4444;
+}
+
+.btn-comment:hover {
+  background: #f3f4f6;
+  color: #16213e;
+}
+
+/* ========================================
+   COMENTARIOS - AGREGAR AL FINAL
+   ======================================== */
+
+.post-comments {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-show-comments {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.btn-show-comments:hover {
+  background: #f3f4f6;
+  color: #16213e;
+}
+
+.btn-show-comments svg {
+  transition: transform 0.2s ease;
+}
+
+.btn-show-comments:hover svg {
+  transform: translateY(2px);
+}
+
+.btn-toggle-comments {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.btn-toggle-comments:hover {
+  background: #f3f4f6;
+  color: #16213e;
+}
+
+.btn-toggle-comments svg {
+  transition: transform 0.2s ease;
+}
+
+.btn-toggle-comments:hover svg {
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 480px) {
+  .post-card { 
+    padding: 1rem; 
+  }
+  
+  .post-avatar { 
+    width: 34px; 
+    height: 34px; 
+  }
+  
+  .post-content { 
+    font-size: 0.875rem; 
+  }
+  
+  .post-actions { 
+    gap: 1rem; 
+  }
+
+  .btn-show-comments,
+  .btn-toggle-comments {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+/* ========================================
+   MODO OSCURO
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  .post-card { 
+    background: #1a1a2e; 
+    border-color: #2a2a4a; 
+  }
+  
+  .post-author-info h4 { 
+    color: #e5e7eb; 
+  }
+  
+  .post-role { 
+    background: #2a2a4a; 
+    color: #9ca3af; 
+  }
+  
+  .post-content { 
+    color: #e5e7eb; 
+  }
+  
+  .post-actions { 
+    border-top-color: #2a2a4a; 
+  }
+  
+  .btn-like, 
+  .btn-comment { 
+    color: #9ca3af; 
+  }
+  
+  .btn-like:hover { 
+    background: #2a1a1a; 
+  }
+  
+  .btn-comment:hover { 
+    background: #2a2a4a; 
+    color: #e5e7eb; 
+  }
+
+  .post-comments {
+    border-top-color: #2a2a4a;
+  }
+
+  .btn-show-comments {
+    color: #9ca3af;
+  }
+
+  .btn-show-comments:hover {
+    background: #2a2a4a;
+    color: #e5e7eb;
+  }
+
+  .btn-toggle-comments {
+    color: #9ca3af;
+  }
+
+  .btn-toggle-comments:hover {
+    background: #2a2a4a;
+    color: #e5e7eb;
+  }
+}

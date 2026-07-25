@@ -1,0 +1,280 @@
+/* ========================================
+   ACTIVIDAD CARD - VERSIÓN ANTERIOR
+   ======================================== */
+
+.actividad-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #8b5cf6;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.actividad-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+}
+
+/* ====== HEADER ====== */
+.actividad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+/* 
+.actividad-titulo {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #16213e;
+  margin: 0;
+} */
+
+.actividad-badge .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #ede9fe;
+  color: #5b21b6;
+  border: 1px solid #8b5cf6;
+}
+
+/* ====== BODY ====== */
+.actividad-descripcion {
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* ====== INFO ====== */
+.actividad-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.actividad-info .info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.actividad-info .info-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.actividad-info .info-label .icon {
+  color: #9ca3af;
+}
+
+.actividad-info .info-value {
+  font-size: 0.875rem;
+  color: #16213e;
+  font-weight: 500;
+}
+
+/* ====== FOOTER ====== */
+.actividad-footer {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-unirse {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-unirse:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-unirse:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-unido {
+  background: #10b981;
+}
+
+.btn-unido:hover:not(:disabled) {
+  background: #059669;
+}
+/* ====== BOTÓN SALIR ====== */
+.btn-salir {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-salir:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-salir:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actividad-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.actividad-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.actividad-actions .btn-edit {
+  color: #3b82f6;
+}
+
+.actividad-actions .btn-edit:hover {
+  background: #dbeafe;
+}
+
+.actividad-actions .btn-delete {
+  color: #ef4444;
+}
+
+.actividad-actions .btn-delete:hover {
+  background: #fee2e2;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .actividad-card {
+    padding: 1rem;
+  }
+
+  .actividad-titulo {
+    font-size: 1rem;
+  }
+
+  .actividad-info {
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5rem;
+  }
+
+  .actividad-footer {
+    flex-direction: column;
+  }
+
+  .btn-unirse {
+    width: 100%;
+  }
+
+  .actividad-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .actividad-card {
+    background: #1a1a2e;
+    border-color: #2a2a4a;
+  }
+
+  .actividad-card:hover {
+    border-color: #8b5cf6;
+  }
+
+  .actividad-titulo {
+    color: #e5e7eb;
+  }
+
+  .actividad-descripcion {
+    color: #9ca3af;
+  }
+
+  .actividad-info {
+    background: #0f0f1a;
+  }
+
+  .actividad-info .info-value {
+    color: #e5e7eb;
+  }
+
+  .actividad-footer {
+    border-top-color: #2a2a4a;
+  }
+
+  .actividad-actions .btn-edit:hover {
+    background: #1a2a4a;
+  }
+
+  .actividad-actions .btn-delete:hover {
+    background: #3a1a1a;
+  }
+
+  .btn-unirse {
+    background: linear-gradient(135deg, #5b21b6, #4c1d95);
+  }
+
+  .btn-unirse:hover:not(:disabled) {
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+  }
+}

@@ -1,0 +1,228 @@
+/* ========================================
+   EVENTOCARD.CSS
+   ======================================== */
+
+.evento-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #3b82f6;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.evento-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+/* ====== HEADER ====== */
+.evento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.evento-titulo {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #16213e;
+  margin: 0;
+}
+
+.evento-badge {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.evento-badge .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #3b82f6;
+}
+
+/* ====== BODY ====== */
+.evento-descripcion {
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* ====== INFO ====== */
+.evento-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.evento-info .info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.evento-info .info-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+}
+
+.evento-info .info-value {
+  font-size: 0.875rem;
+  color: #16213e;
+  font-weight: 500;
+}
+
+/* ====== FOOTER ====== */
+.evento-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.evento-actions .btn-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.8rem;
+  background: #dbeafe;
+  color: #1e40af;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.evento-actions .btn-edit:hover {
+  background: #bfdbfe;
+}
+
+.evento-actions .btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.8rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.evento-actions .btn-delete:hover {
+  background: #fecaca;
+}
+
+/* ====== EVENTO TYPES (bordes de colores) ====== */
+.evento-card.culto { border-left-color: #8B4513; }
+.evento-card.bautismo { border-left-color: #4A90D9; }
+.evento-card.boda { border-left-color: #c9a84c; }
+.evento-card.visita { border-left-color: #27AE60; }
+.evento-card.cena { border-left-color: #E67E22; }
+.evento-card.retiro { border-left-color: #2ECC71; }
+.evento-card.otro { border-left-color: #6b7280; }
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .evento-card {
+    padding: 1rem;
+  }
+
+  .evento-titulo {
+    font-size: 1rem;
+  }
+
+  .evento-info {
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5rem;
+  }
+
+  .evento-actions {
+    flex-direction: column;
+  }
+
+  .evento-actions .btn-edit,
+  .evento-actions .btn-delete {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .evento-card {
+    background: #1a1a2e;
+    border-color: #2a2a4a;
+  }
+
+  .evento-card:hover {
+    border-color: #3b82f6;
+  }
+
+  .evento-titulo {
+    color: #e5e7eb;
+  }
+
+  .evento-descripcion {
+    color: #9ca3af;
+  }
+
+  .evento-info {
+    background: #0f0f1a;
+  }
+
+  .evento-info .info-value {
+    color: #e5e7eb;
+  }
+
+  .evento-actions {
+    border-top-color: #2a2a4a;
+  }
+
+  .evento-actions .btn-edit {
+    background: #1e3a5f;
+    color: #60a5fa;
+  }
+
+  .evento-actions .btn-edit:hover {
+    background: #1e4a7f;
+  }
+
+  .evento-actions .btn-delete {
+    background: #3a1a1a;
+    color: #f87171;
+  }
+
+  .evento-actions .btn-delete:hover {
+    background: #4a2a2a;
+  }
+}

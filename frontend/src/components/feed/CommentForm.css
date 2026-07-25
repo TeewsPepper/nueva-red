@@ -1,0 +1,118 @@
+/* ========================================
+   COMMENT FORM - CONSISTENTE
+   ======================================== */
+
+.comment-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.comment-form input {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  background: #ffffff;
+  color: #16213e;
+  transition: all 0.2s ease;
+  min-height: 40px;
+}
+
+.comment-form input:focus {
+  outline: none;
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+.comment-form input::placeholder {
+  color: #9ca3af;
+}
+
+.comment-form input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f3f4f6;
+}
+
+.comment-form button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  background: linear-gradient(135deg, #c9a84c, #b8960f);
+  color: #16213e;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 44px;
+  min-height: 40px;
+}
+
+.comment-form button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(201, 168, 76, 0.35);
+}
+
+.comment-form button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.comment-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.comment-form button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .comment-form input {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.65rem;
+    min-height: 36px;
+  }
+
+  .comment-form button {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .comment-form button svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .comment-form input {
+    background: #0f0f1a;
+    border-color: #2a2a4a;
+    color: #e5e7eb;
+  }
+
+  .comment-form input:focus {
+    border-color: #c9a84c;
+  }
+
+  .comment-form input::placeholder {
+    color: #6b7280;
+  }
+
+  .comment-form input:disabled {
+    background: #1a1a2e;
+  }
+
+  .comment-form button {
+    background: linear-gradient(135deg, #c9a84c, #b8960f);
+    color: #0f0f1a;
+  }
+}

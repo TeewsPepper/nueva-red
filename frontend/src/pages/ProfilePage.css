@@ -1,0 +1,29 @@
+/* ========================================
+   PROFILE PAGE - CONSISTENTE
+   ======================================== */
+
+.profile-page {
+  min-height: 100vh;
+}
+
+.profile-page-content {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  
+  min-height: calc(100vh - 70px); /* 👈 Resta la altura del header */
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .profile-page-content {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .profile-page-content {
+    background: #0f0f1a;
+  }
+}

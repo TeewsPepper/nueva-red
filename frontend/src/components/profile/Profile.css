@@ -1,0 +1,356 @@
+/* ========================================
+   PROFILE.CSS - CONSISTENTE
+   ======================================== */
+
+.profile-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;  /* 👈 SIN PADDING, la página lo maneja */
+}
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* ====== COVER ====== */
+.profile-cover {
+  height: 120px;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  position: relative;
+}
+
+.profile-cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to top, #ffffff, transparent);
+}
+
+/* ====== BODY ====== */
+.profile-body {
+  padding: 0 1.5rem 1.5rem;
+  position: relative;
+}
+
+.profile-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: -50px;
+  margin-bottom: 0.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+}
+
+.profile-avatar.role-pastor {
+  background: linear-gradient(135deg, #fef3c7, #f59e0b);
+  color: #78350f;
+}
+
+.profile-avatar.role-lider {
+  background: linear-gradient(135deg, #dbeafe, #3b82f6);
+  color: #1e3a5f;
+}
+
+.profile-avatar.role-miembro {
+  background: linear-gradient(135deg, #d1fae5, #10b981);
+  color: #064e3b;
+}
+
+.profile-avatar.role-visitante {
+  background: linear-gradient(135deg, #f3f4f6, #9ca3af);
+  color: #374151;
+}
+
+/* ====== INFO ====== */
+.profile-info {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.profile-name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #16213e;
+}
+
+.profile-role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+  border: 1px solid transparent;
+}
+
+.profile-role-badge.role-pastor {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #f59e0b;
+}
+
+.profile-role-badge.role-lider {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #3b82f6;
+}
+
+.profile-role-badge.role-miembro {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #10b981;
+}
+
+.profile-role-badge.role-visitante {
+  background: #f3f4f6;
+  color: #4b5563;
+  border-color: #9ca3af;
+}
+
+/* ====== DETAILS ====== */
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.profile-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #4b5563;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.profile-detail:last-child {
+  border-bottom: none;
+}
+
+.profile-detail svg {
+  color: #6b7280;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.profile-detail span {
+  color: #16213e;
+  font-weight: 500;
+}
+
+/* ====== BUTTON ====== */
+.btn-edit-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem;
+  background: linear-gradient(135deg, #c9a84c, #b8960f);
+  color: #16213e;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px;
+}
+
+.btn-edit-profile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(201, 168, 76, 0.35);
+}
+
+.btn-edit-profile:active {
+  transform: translateY(0);
+}
+
+/* ====== ERROR ====== */
+.profile-error {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .profile-body {
+    padding: 0 1rem 1rem;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    margin-top: -40px;
+    font-size: 1.5rem;
+  }
+
+  .profile-name {
+    font-size: 1.25rem;
+  }
+
+  .profile-details {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-cover {
+    height: 80px;
+  }
+
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+    margin-top: -35px;
+    font-size: 1.25rem;
+    border-width: 3px;
+  }
+
+  .profile-name {
+    font-size: 1.1rem;
+  }
+
+  .profile-role-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.6rem;
+  }
+
+  .profile-detail {
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .profile-detail svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn-edit-profile {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+    min-height: 44px;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .profile-card {
+    background: #1a1a2e;
+    border-color: #2a2a4a;
+  }
+
+  .profile-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-cover::after {
+    background: linear-gradient(to top, #1a1a2e, transparent);
+  }
+
+  .profile-avatar {
+    border-color: #1a1a2e;
+  }
+
+  .profile-name {
+    color: #e5e7eb;
+  }
+
+  .profile-details {
+    background: #0f0f1a;
+    border-color: #2a2a4a;
+  }
+
+  .profile-detail {
+    color: #9ca3af;
+    border-bottom-color: #1a1a2e;
+  }
+
+  .profile-detail span {
+    color: #e5e7eb;
+  }
+
+  .profile-detail svg {
+    color: #6b7280;
+  }
+
+  .btn-edit-profile {
+    background: linear-gradient(135deg, #c9a84c, #b8960f);
+    color: #0f0f1a;
+  }
+
+  .btn-edit-profile:hover {
+    box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3);
+  }
+
+  .profile-role-badge.role-pastor {
+    background: #2a1a0a;
+    color: #fbbf24;
+    border-color: #78350f;
+  }
+
+  .profile-role-badge.role-lider {
+    background: #0a1a2a;
+    color: #60a5fa;
+    border-color: #1e3a5f;
+  }
+
+  .profile-role-badge.role-miembro {
+    background: #0a1a0a;
+    color: #34d399;
+    border-color: #065f46;
+  }
+
+  .profile-role-badge.role-visitante {
+    background: #1a1a1a;
+    color: #9ca3af;
+    border-color: #374151;
+  }
+
+  .profile-error {
+    color: #9ca3af;
+  }
+}

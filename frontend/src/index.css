@@ -1,0 +1,60 @@
+/* ========================================
+   INDEX.CSS - Reset y variables globales
+   ======================================== */
+
+/* ====== VARIABLES ====== */
+:root {
+ --text-light: #e5e7eb;
+  
+  /* Fuentes */
+  --font-serif: 'Playfair Display', 'Georgia', 'Palatino Linotype', 'Times New Roman', serif;
+  --font-sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ====== RESET ====== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-body);
+  color: var(--text-primary);
+  line-height: 1.6;
+  
+}
+
+/* ====== SCROLLBAR ====== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-body);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dark);
+}
+
+/* ====== RESPONSIVE VARIABLES ====== */
+@media (max-width: 768px) {
+  :root {
+    --shadow: 0 2px 4px rgba(44, 24, 16, 0.06);
+    --radius: 8px;
+  }
+}

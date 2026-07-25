@@ -1,0 +1,219 @@
+/* ========================================
+   MINISTERIOCARD.CSS
+   ======================================== */
+
+.ministerio-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #c9a84c;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.ministerio-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-color: #c9a84c;
+  transform: translateY(-2px);
+}
+
+/* ====== HEADER ====== */
+.ministerio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.ministerio-nombre {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #16213e;
+  margin: 0;
+}
+
+.ministerio-badge {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.ministerio-badge .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #c9a84c;
+}
+
+/* ====== BODY ====== */
+.ministerio-descripcion {
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* ====== INFO ====== */
+.ministerio-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.ministerio-info .info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.ministerio-info .info-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+}
+
+.ministerio-info .info-value {
+  font-size: 0.875rem;
+  color: #16213e;
+  font-weight: 500;
+}
+
+/* ====== FOOTER ====== */
+.ministerio-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.ministerio-actions .btn-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.8rem;
+  background: #dbeafe;
+  color: #1e40af;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.ministerio-actions .btn-edit:hover {
+  background: #bfdbfe;
+}
+
+.ministerio-actions .btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.8rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.ministerio-actions .btn-delete:hover {
+  background: #fecaca;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .ministerio-card {
+    padding: 1rem;
+  }
+
+  .ministerio-nombre {
+    font-size: 1rem;
+  }
+
+  .ministerio-info {
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5rem;
+  }
+
+  .ministerio-actions {
+    flex-direction: column;
+  }
+
+  .ministerio-actions .btn-edit,
+  .ministerio-actions .btn-delete {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ====== MODO OSCURO ====== */
+@media (prefers-color-scheme: dark) {
+  .ministerio-card {
+    background: #1a1a2e;
+    border-color: #2a2a4a;
+  }
+
+  .ministerio-card:hover {
+    border-color: #c9a84c;
+  }
+
+  .ministerio-nombre {
+    color: #e5e7eb;
+  }
+
+  .ministerio-descripcion {
+    color: #9ca3af;
+  }
+
+  .ministerio-info {
+    background: #0f0f1a;
+  }
+
+  .ministerio-info .info-value {
+    color: #e5e7eb;
+  }
+
+  .ministerio-actions {
+    border-top-color: #2a2a4a;
+  }
+
+  .ministerio-actions .btn-edit {
+    background: #1e3a5f;
+    color: #60a5fa;
+  }
+
+  .ministerio-actions .btn-edit:hover {
+    background: #1e4a7f;
+  }
+
+  .ministerio-actions .btn-delete {
+    background: #3a1a1a;
+    color: #f87171;
+  }
+
+  .ministerio-actions .btn-delete:hover {
+    background: #4a2a2a;
+  }
+}
