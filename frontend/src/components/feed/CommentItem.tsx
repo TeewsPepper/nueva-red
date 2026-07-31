@@ -1,70 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { Heart, Trash2, User } from "lucide-react";
-import { useAuth } from "../../hooks/useAuth";
-import { useSocket } from "../../context/SocketContext";
-import { Comment, ComentarioLikeUpdateData } from "../../types";
-import "./CommentItem.css";
+import React, { useEffect, useState } from "react"
+import { Heart, Trash2, User, MessageCircle } from "lucide-react"
+import { useAuth } from "../../hooks/useAuth"
+import { useSocket } from "../../context/SocketContext"
+import { Comment, ComentarioLikeUpdateData } from "../../types"
+import "./CommentItem.css"
 
 interface CommentItemProps {
-  comment: Comment;
-  onLike: (id: string) => void;
-  onDelete?: (id: string) => void;
+  comment: Comment
+  onLike: (id: string) => void
+  onDelete?: (id: string) => void
+  onReply?: (parentId: string, content: string) => Promise<void>
 }
 
 export const CommentItem: React.FC<CommentItemProps> = ({
   comment,
   onLike,
   onDelete,
+  onReply,
 }) => {
-  const { user } = useAuth();
-  const { socket, on, off } = useSocket(); // 👈 USAR on y off
-  const [likes, setLikes] = useState<string[]>(comment.likes || []);
-  const isLiked = likes.includes(user?._id || "");
-  const isAuthor = comment.author._id === user?._id;
-  const isPastor = user?.role === "pastor";
-  const canDelete = isAuthor || isPastor;
+  const { user } = useAuth()
+  const { socket, on, off } = useSocket()
+  const [likes, setLikes] = useState<string[]>(comment.likes || [])
+  const [showReplies, setShowReplies] = useState(false)
+  const [replyContent, setReplyContent] = useState("")
+  const [isReplying, setIsReplying] = useState(false)
+  
+  const isLiked = likes.includes(user?._id || "")
+  const isAuthor = comment.author._id === user?._id
+  const isPastor = user?.role === "pastor"
+  const canDelete = isAuthor || isPastor
+  const hasReplies = comment.replies && comment.replies.length > 0
 
-  // 👇 ESCUCHAR ACTUALIZACIONES DE LIKES EN TIEMPO REAL
   useEffect(() => {
-    if (!socket) {
-      console.log("⚠️ Socket no disponible en CommentItem");
-      return;
-    }
-
-    console.log(
-      `❤️ CommentItem ${comment._id} escuchando comentario_like_updated`,
-    );
+    if (!socket) return
 
     const handleLikeUpdate = (data: ComentarioLikeUpdateData) => {
-      console.log(
-        `❤️ Like update recibido para comentario ${data.commentId}`,
-        data,
-      );
-
       if (data.commentId === comment._id) {
-        console.log(`✅ Actualizando likes para comentario ${comment._id}`);
-        setLikes(data.likes);
+        setLikes(data.likes)
       }
-    };
+    }
 
-    // 👇 USAR on y off del contexto
-    on("comentario_like_updated", handleLikeUpdate);
+    on("comentario_like_updated", handleLikeUpdate)
 
     return () => {
-      off("comentario_like_updated", handleLikeUpdate);
-    };
-  }, [socket, comment._id, on, off]);
+      off("comentario_like_updated", handleLikeUpdate)
+    }
+  }, [socket, comment._id, on, off])
 
   const handleLike = () => {
-    console.log(`❤️ Click like en comentario ${comment._id}`);
-    onLike(comment._id);
-  };
+    onLike(comment._id)
+  }
 
   const handleDelete = () => {
     if (confirm("¿Estás seguro de eliminar este comentario?")) {
-      onDelete?.(comment._id);
+      onDelete?.(comment._id)
     }
-  };
+  }
+
+  const handleReplySubmit = async () => {
+    if (!replyContent.trim() || !onReply) return
+    try {
+      await onReply(comment._id, replyContent)
+      setReplyContent("")
+      setIsReplying(false)
+    } catch (error) {
+      console.error("Error al responder:", error)
+    }
+  }
 
   return (
     <div className="comment-item">
@@ -92,6 +94,17 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             <Heart size={14} fill={isLiked ? "#ef4444" : "none"} />
             <span>{likes.length}</span>
           </button>
+          
+          {onReply && (
+            <button
+              className="comment-reply-btn"
+              onClick={() => setIsReplying(!isReplying)}
+            >
+              <MessageCircle size={14} />
+              Responder
+            </button>
+          )}
+          
           {canDelete && (
             <button
               className="comment-delete"
@@ -102,7 +115,49 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             </button>
           )}
         </div>
+
+        {isReplying && onReply && (
+          <div className="reply-form">
+            <input
+              type="text"
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder="Escribe tu respuesta..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleReplySubmit()
+                if (e.key === 'Escape') setIsReplying(false)
+              }}
+            />
+            <button onClick={handleReplySubmit} disabled={!replyContent.trim()}>
+              Responder
+            </button>
+            <button onClick={() => setIsReplying(false)}>Cancelar</button>
+          </div>
+        )}
+
+        {hasReplies && (
+          <button
+            className="show-replies-btn"
+            onClick={() => setShowReplies(!showReplies)}
+          >
+            {showReplies ? 'Ocultar' : 'Ver'} {comment.replies!.length} respuestas
+          </button>
+        )}
+
+        {hasReplies && showReplies && (
+          <div className="comment-replies">
+            {comment.replies!.map((reply) => (
+              <CommentItem
+                key={reply._id}
+                comment={reply}
+                onLike={onLike}
+                onDelete={onDelete}
+                onReply={onReply}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}

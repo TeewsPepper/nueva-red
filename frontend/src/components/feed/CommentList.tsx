@@ -1,9 +1,10 @@
+// frontend/src/components/feed/CommentList.tsx
 import React, { useEffect, useRef } from 'react'
 import { useComments } from '../../hooks/useComments'
 import { useSocket } from '../../context/SocketContext'
 import { CommentItem } from './CommentItem'
 import { CommentForm } from './CommentForm'
-import { NuevoComentarioData } from '../../types'
+import { Comment, NuevoComentarioData } from '../../types'
 import './CommentList.css'
 
 interface CommentListProps {
@@ -14,7 +15,8 @@ interface CommentListProps {
 export const CommentList: React.FC<CommentListProps> = ({ postId, onCommentCountChange }) => {
   const { comments, loading, cargarComentarios, crearComentario, toggleLikeComentario, eliminarComentario, setComments } = useComments()
   const { socket, on, off } = useSocket()
-  const commentsRef = useRef(comments)
+  const commentsRef = useRef<Comment[]>(comments)
+  const processingIds = useRef<Set<string>>(new Set()) // 👈 Para evitar duplicados
 
   useEffect(() => {
     commentsRef.current = comments
@@ -22,24 +24,69 @@ export const CommentList: React.FC<CommentListProps> = ({ postId, onCommentCount
 
   useEffect(() => {
     cargarComentarios(postId)
-  }, [postId])
+  }, [postId, cargarComentarios])
 
-  // 👇 ESCUCHAR NUEVOS COMENTARIOS
   useEffect(() => {
     if (!socket) return
 
-    console.log(`💬 CommentList ${postId} escuchando nuevo_comentario`)
-
     const handleNuevoComentario = (data: NuevoComentarioData) => {
       if (data.postId === postId) {
-        console.log(`✅ Agregando comentario al post ${postId}`)
-        setComments((prev) => {
-          const exists = prev.some(c => c._id === data.comment._id)
-          if (exists) {
-            console.log('⚠️ Comentario ya existe, no se duplica')
+        const commentId = data.comment._id
+        
+        // 👇 Si ya estamos procesando este comentario, ignorar
+        if (processingIds.current.has(commentId)) {
+          console.log('⚠️ Comentario ya en proceso, ignorando:', commentId)
+          return
+        }
+        
+        // 👇 Marcar como en proceso
+        processingIds.current.add(commentId)
+        
+        setComments((prev: Comment[]) => {
+          // Verificar si el comentario ya existe
+          const exists = (commentList: Comment[]): boolean => {
+            return commentList.some(c => c._id === commentId)
+          }
+          
+          if (exists(prev)) {
+            console.log('⚠️ Comentario ya existe en el estado, ignorando:', commentId)
+            processingIds.current.delete(commentId)
             return prev
           }
-          return [...prev, data.comment]
+          
+          let newComments: Comment[]
+          
+          // Si tiene parentId, es una respuesta
+          if (data.comment.parentId) {
+            const addReply = (commentList: Comment[]): Comment[] => {
+              return commentList.map((c) => {
+                if (c._id === data.comment.parentId) {
+                  return {
+                    ...c,
+                    replies: [...(c.replies || []), data.comment]
+                  }
+                }
+                if (c.replies && c.replies.length > 0) {
+                  return {
+                    ...c,
+                    replies: addReply(c.replies)
+                  }
+                }
+                return c
+              })
+            }
+            newComments = addReply(prev)
+          } else {
+            // Comentario raíz
+            newComments = [...prev, data.comment]
+          }
+          
+          // Limpiar el marcador de procesamiento después de un tiempo
+          setTimeout(() => {
+            processingIds.current.delete(commentId)
+          }, 1000)
+          
+          return newComments
         })
         
         if (onCommentCountChange) {
@@ -55,10 +102,21 @@ export const CommentList: React.FC<CommentListProps> = ({ postId, onCommentCount
     }
   }, [socket, postId, onCommentCountChange, setComments, on, off])
 
+  const rootComments = comments.filter((c: Comment) => !c.parentId)
+
   const handleCrearComentario = async (content: string) => {
     const nuevoComentario = await crearComentario(postId, content)
+    // 👇 El socket actualizará el estado, no necesitamos hacer nada aquí
     if (nuevoComentario && onCommentCountChange) {
-      onCommentCountChange(commentsRef.current.length + 1)
+      // El contador se actualizará cuando llegue el evento de socket
+    }
+  }
+
+  const handleReply = async (parentId: string, content: string) => {
+    const nuevaRespuesta = await crearComentario(postId, content, parentId)
+    // 👇 El socket actualizará el estado, no necesitamos hacer nada aquí
+    if (nuevaRespuesta && onCommentCountChange) {
+      // El contador se actualizará cuando llegue el evento de socket
     }
   }
 
@@ -70,16 +128,17 @@ export const CommentList: React.FC<CommentListProps> = ({ postId, onCommentCount
     <div className="comment-list">
       <CommentForm onSubmit={handleCrearComentario} />
       
-      {comments.length === 0 ? (
+      {rootComments.length === 0 ? (
         <p className="comment-empty">No hay comentarios aún. Sé el primero en comentar.</p>
       ) : (
         <div className="comment-items">
-          {comments.map((comment) => (
+          {rootComments.map((comment: Comment) => (
             <CommentItem
               key={comment._id}
               comment={comment}
               onLike={toggleLikeComentario}
               onDelete={eliminarComentario}
+              onReply={handleReply}
             />
           ))}
         </div>

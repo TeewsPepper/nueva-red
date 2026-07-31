@@ -200,3 +200,258 @@
     background: #2a1a1a;
   }
 }
+/* ========================================
+   RESPUESTAS Y ANIDACIÓN
+   ======================================== */
+
+/* Contenedor de respuestas anidadas */
+.comment-replies {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+  border-left: 2px solid #e5e7eb;
+  position: relative;
+}
+
+/* Línea vertical continua */
+.comment-replies::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e5e7eb;
+}
+
+/* Cada respuesta anidada */
+.comment-replies .comment-item {
+  padding-left: 0;
+  border-bottom: none;
+  padding-bottom: 0.25rem;
+}
+
+.comment-replies .comment-item:last-child {
+  padding-bottom: 0;
+}
+
+/* ====== BOTÓN RESPONDER ====== */
+.comment-reply-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.comment-reply-btn:hover {
+  background: #f3f4f6;
+  color: #c9a84c;
+}
+
+.comment-reply-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ====== FORMULARIO DE RESPUESTA ====== */
+.reply-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f3f4f6;
+  flex-wrap: wrap;
+}
+
+.reply-form input {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: #16213e;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reply-form input:focus {
+  outline: none;
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+}
+
+.reply-form input::placeholder {
+  color: #9ca3af;
+}
+
+.reply-form button {
+  padding: 0.4rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.reply-form button:first-of-type {
+  background: #c9a84c;
+  color: white;
+}
+
+.reply-form button:first-of-type:hover:not(:disabled) {
+  background: #b8960f;
+}
+
+.reply-form button:first-of-type:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reply-form button:last-of-type {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.reply-form button:last-of-type:hover {
+  background: #e5e7eb;
+}
+
+/* ====== BOTÓN MOSTRAR/OCULTAR RESPUESTAS ====== */
+.show-replies-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  margin-top: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.show-replies-btn:hover {
+  background: #f3f4f6;
+  color: #c9a84c;
+}
+
+.show-replies-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ========================================
+   MODO OSCURO - RESPUESTAS
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  .comment-replies {
+    border-left-color: #2a2a4a;
+  }
+
+  .comment-replies::before {
+    background: #2a2a4a;
+  }
+
+  .comment-reply-btn {
+    color: #9ca3af;
+  }
+
+  .comment-reply-btn:hover {
+    background: #2a2a4a;
+    color: #c9a84c;
+  }
+
+  .reply-form {
+    border-top-color: #2a2a4a;
+  }
+
+  .reply-form input {
+    background: #1a1a2e;
+    border-color: #2a2a4a;
+    color: #e5e7eb;
+  }
+
+  .reply-form input:focus {
+    border-color: #c9a84c;
+    box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+  }
+
+  .reply-form input::placeholder {
+    color: #6b7280;
+  }
+
+  .reply-form button:last-of-type {
+    background: #2a2a4a;
+    color: #9ca3af;
+  }
+
+  .reply-form button:last-of-type:hover {
+    background: #3a3a5a;
+  }
+
+  .show-replies-btn {
+    color: #9ca3af;
+  }
+
+  .show-replies-btn:hover {
+    background: #2a2a4a;
+    color: #c9a84c;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - RESPUESTAS
+   ======================================== */
+
+@media (max-width: 480px) {
+  .comment-replies {
+    padding-left: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .reply-form {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .reply-form input {
+    width: 100%;
+    min-width: unset;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .reply-form button {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .comment-reply-btn {
+    font-size: 0.65rem;
+  }
+
+  .comment-reply-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .show-replies-btn {
+    font-size: 0.65rem;
+  }
+}

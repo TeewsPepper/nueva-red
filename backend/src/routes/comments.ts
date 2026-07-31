@@ -9,18 +9,58 @@ import { getIO } from '../server.js'
 const router = express.Router()
 
 // ========================================
-// GET /api/comments/post/:postId - Obtener comentarios de un post
+// GET /api/comments/post/:postId - Obtener comentarios con anidación
 // ========================================
 router.get('/post/:postId', protect, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const comments = await Comment.find({ 
+    const allComments = await Comment.find({ 
       postId: req.params.postId,
       isActive: true 
     })
       .populate('author', 'name email role')
       .sort({ createdAt: 1 })
+      .lean()
 
-    res.json({ success: true, data: comments })
+    interface CommentWithReplies {
+      _id: string
+      postId: string
+      author: {
+        _id: string
+        name: string
+        email: string
+        role: string
+      }
+      content: string
+      parentId: string | null
+      likes: string[]
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+      replies: CommentWithReplies[]
+    }
+
+    const commentMap: Record<string, CommentWithReplies> = {}
+    const roots: CommentWithReplies[] = []
+
+    allComments.forEach((comment: any) => {
+      commentMap[comment._id.toString()] = {
+        ...comment,
+        replies: []
+      }
+    })
+
+    allComments.forEach((comment: any) => {
+      const commentId = comment._id.toString()
+      const parentId = comment.parentId?.toString()
+      
+      if (parentId && commentMap[parentId]) {
+        commentMap[parentId].replies.push(commentMap[commentId])
+      } else {
+        roots.push(commentMap[commentId])
+      }
+    })
+
+    res.json({ success: true, data: roots })
   } catch (error) {
     console.error('Error al obtener comentarios:', error)
     res.status(500).json({ success: false, message: 'Error al obtener comentarios' })
@@ -28,7 +68,7 @@ router.get('/post/:postId', protect, async (req: AuthRequest, res: Response): Pr
 })
 
 // ========================================
-// POST /api/comments - Crear comentario
+// POST /api/comments - Crear comentario (con soporte para respuestas)
 // ========================================
 router.post('/', protect, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -38,7 +78,7 @@ router.post('/', protect, async (req: AuthRequest, res: Response): Promise<void>
       return
     }
 
-    const { postId, content } = req.body
+    const { postId, content, parentId } = req.body
 
     if (!content || !content.trim()) {
       res.status(400).json({ success: false, message: 'El contenido es requerido' })
@@ -51,43 +91,70 @@ router.post('/', protect, async (req: AuthRequest, res: Response): Promise<void>
       return
     }
 
+    if (parentId) {
+      const parentComment = await Comment.findById(parentId)
+      if (!parentComment || !parentComment.isActive) {
+        res.status(404).json({ success: false, message: 'Comentario padre no encontrado' })
+        return
+      }
+      
+      if (parentComment.postId.toString() !== postId) {
+        res.status(400).json({ success: false, message: 'El comentario padre no pertenece a este post' })
+        return
+      }
+    }
+
     const comment = await Comment.create({
       postId,
       author: user._id,
-      content: content.trim()
+      content: content.trim(),
+      parentId: parentId || null
     })
 
-    post.comments.push(comment._id)
-    await post.save()
+    if (!parentId) {
+      post.comments.push(comment._id)
+      await post.save()
+    }
 
     await comment.populate('author', 'name email role')
 
-    // Crear notificación si no es el autor del post
-    if (post.author.toString() !== user._id.toString()) {
+    let targetUserId = post.author
+    let notificationMessage = `${user.name} comentó en tu publicación`
+    let notificationTitle = 'Nuevo comentario'
+
+    if (parentId) {
+      const parentComment = await Comment.findById(parentId)
+      if (parentComment) {
+        targetUserId = parentComment.author
+        notificationMessage = `${user.name} respondió a tu comentario`
+        notificationTitle = 'Nueva respuesta'
+      }
+    }
+
+    if (targetUserId.toString() !== user._id.toString()) {
       await Notification.create({
-        user: post.author,
+        user: targetUserId,
         type: 'comment',
-        title: 'Nuevo comentario',
-        message: `${user.name} comentó en tu publicación`,
+        title: notificationTitle,
+        message: notificationMessage,
         link: `/posts/${post._id}`
       })
 
-      // EMITIR NOTIFICACIÓN EN TIEMPO REAL
       const io = getIO()
       io.emit('nueva_notificacion', {
-        userId: post.author.toString(),
+        userId: targetUserId.toString(),
         type: 'comment',
-        message: `${user.name} comentó en tu publicación`,
+        message: notificationMessage,
         link: `/posts/${post._id}`
       })
     }
 
-    // EMITIR EVENTO DE NUEVO COMENTARIO EN TIEMPO REAL
     const io = getIO()
-    console.log(`💬 Emitiendo nuevo_comentario para post ${post._id}`)
+    console.log(`💬 Emitiendo nuevo_comentario para post ${post._id}${parentId ? ` (respuesta a ${parentId})` : ''}`)
     io.emit('nuevo_comentario', {
       postId: post._id,
-      comment: comment
+      comment: comment,
+      parentId: parentId || null
     })
 
     res.status(201).json({ success: true, data: comment })
@@ -162,7 +229,6 @@ router.post('/:id/like', protect, async (req: AuthRequest, res: Response): Promi
 
     await comment.save()
 
-    // EMITIR EVENTO DE LIKE ACTUALIZADO EN TIEMPO REAL
     const io = getIO()
     console.log(`❤️ Like actualizado para comentario ${comment._id}: ${comment.likes.length} likes`)
     io.emit('comentario_like_updated', {

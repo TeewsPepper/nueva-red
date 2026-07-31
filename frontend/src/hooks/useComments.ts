@@ -1,3 +1,4 @@
+// frontend/src/hooks/useComments.ts
 import { useState, useCallback } from 'react'
 import api from '../services/api'
 import { Comment, ApiError } from '../types'
@@ -27,24 +28,34 @@ export const useComments = () => {
     }
   }, [])
 
-  const crearComentario = useCallback(async (postId: string, content: string): Promise<Comment | undefined> => {
-    try {
-      console.log(`📝 Creando comentario para post ${postId}`)
-      const response = await api.post('/comments', { postId, content })
-      if (response.data.success) {
-        const newComment = response.data.data
-        console.log('✅ Comentario creado:', newComment)
-        return newComment
+  const crearComentario = useCallback(
+    async (postId: string, content: string, parentId?: string | null): Promise<Comment | undefined> => {
+      try {
+        console.log(`📝 Creando comentario para post ${postId}${parentId ? ` (respuesta a ${parentId})` : ''}`)
+        const response = await api.post('/comments', { 
+          postId, 
+          content,
+          parentId: parentId || null
+        })
+        if (response.data.success) {
+          const newComment = response.data.data
+          console.log('✅ Comentario creado:', newComment)
+          
+          // ❌ ELIMINAR esta actualización local
+          // El socket se encargará de actualizar a TODOS los usuarios
+          // setComments((prev) => { ... })
+          
+          return newComment
+        }
+      } catch (err) {
+        const apiError = err as ApiError
+        console.error('Error al crear comentario:', err)
+        setError(apiError.response?.data?.message || 'Error al crear comentario')
+        throw err
       }
-    } catch (err) {
-      const apiError = err as ApiError
-      console.error('Error al crear comentario:', err)
-      setError(apiError.response?.data?.message || 'Error al crear comentario')
-      throw err
-    }
-  }, [])
+    }, []
+  )
 
-  // 👇 toggleLikeComentario - ACTUALIZAR LOCALMENTE
   const toggleLikeComentario = useCallback(async (commentId: string): Promise<void> => {
     try {
       console.log(`❤️ Dando/quitar like al comentario ${commentId}`)
@@ -53,14 +64,23 @@ export const useComments = () => {
       if (response.data.success) {
         console.log('📡 Respuesta del like:', response.data)
         
-        // 👇 ACTUALIZAR LOCALMENTE (el socket también actualizará)
-        setComments((prev) =>
-          prev.map((comment) =>
-            comment._id === commentId
-              ? { ...comment, likes: response.data.data.likes }
-              : comment
-          )
-        )
+        setComments((prev) => {
+          const updateLikes = (comments: Comment[]): Comment[] => {
+            return comments.map((c) => {
+              if (c._id === commentId) {
+                return { ...c, likes: response.data.data.likes }
+              }
+              if (c.replies && c.replies.length > 0) {
+                return {
+                  ...c,
+                  replies: updateLikes(c.replies)
+                }
+              }
+              return c
+            })
+          }
+          return updateLikes(prev)
+        })
       }
     } catch (err) {
       console.error('Error al dar like a comentario:', err)
@@ -70,7 +90,26 @@ export const useComments = () => {
   const eliminarComentario = useCallback(async (commentId: string): Promise<void> => {
     try {
       await api.delete(`/comments/${commentId}`)
-      setComments((prev) => prev.filter((comment) => comment._id !== commentId))
+      
+      setComments((prev) => {
+        const removeComment = (comments: Comment[]): Comment[] => {
+          return comments
+            .map((c) => {
+              if (c._id === commentId) {
+                return null
+              }
+              if (c.replies && c.replies.length > 0) {
+                return {
+                  ...c,
+                  replies: removeComment(c.replies).filter((r): r is Comment => r !== null)
+                }
+              }
+              return c
+            })
+            .filter((c): c is Comment => c !== null)
+        }
+        return removeComment(prev)
+      })
     } catch (err) {
       const apiError = err as ApiError
       console.error('Error al eliminar comentario:', err)
