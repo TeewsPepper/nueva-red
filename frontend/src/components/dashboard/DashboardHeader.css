@@ -557,3 +557,37 @@
     padding: 0.4rem 0.6rem;
   }
 }
+
+/* ====== NOTIFICATION BELL EN HEADER ====== */
+.dashboard-header .notification-bell-container {
+  margin-right: 0.5rem;
+}
+
+.dashboard-header .notification-bell {
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.dashboard-header .notification-bell:hover {
+  color: #c9a84c;
+  background: rgba(201, 168, 76, 0.1);
+}
+
+/* Ajuste para el header-right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .dashboard-header .notification-bell {
+    color: #9ca3af;
+  }
+
+  .dashboard-header .notification-bell:hover {
+    color: #c9a84c;
+    background: rgba(201, 168, 76, 0.15);
+  }
+}

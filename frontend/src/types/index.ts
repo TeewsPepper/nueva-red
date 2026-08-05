@@ -138,6 +138,7 @@ export interface Post {
   ministryId?: string;
   likes: string[];
   comments: Comment[];
+  commentCount?: number;
   isPublic: boolean;
   isActive: boolean;
   createdAt: string;
@@ -166,6 +167,7 @@ export interface NuevoComentarioData {
   postId: string;
   comment: Comment;
   parentId: string | null;
+  totalComments: number
 }
 
 export interface ComentarioLikeUpdateData {
@@ -203,7 +205,7 @@ export interface PrayerRequest {
 export interface Notification {
   _id: string;
   user: string;
-  type: "like" | "comment" | "prayer" | "event" | "system";
+  type: "like" | "comment" | "prayer" | "event" | "system" | "like_comment";
   title: string;
   message: string;
   link?: string;

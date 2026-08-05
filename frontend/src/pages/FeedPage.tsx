@@ -1,11 +1,13 @@
-
+// pages/FeedPage.tsx
 import { useAuth } from '../hooks/useAuth'
+import { useLocation } from 'react-router-dom'
 import { DashboardHeader } from '../components/dashboard/DashboardHeader'
 import { Feed } from '../components/feed/Feed'
 import './FeedPage.css'
 
 export const FeedPage: React.FC = () => {
   const { user, logout } = useAuth()
+  const location = useLocation()
 
   return (
     <div className="feed-page">
@@ -21,7 +23,7 @@ export const FeedPage: React.FC = () => {
           <p>Comparte noticias, oraciones y testimonios con tu comunidad</p>
         </div>
         
-        <Feed />
+        <Feed location={location} />
       </div>
     </div>
   )

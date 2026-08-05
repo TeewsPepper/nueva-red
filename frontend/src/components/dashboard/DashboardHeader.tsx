@@ -1,3 +1,4 @@
+// components/dashboard/DashboardHeader.tsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -18,6 +19,7 @@ import {
   Target,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { NotificationBell } from "../notifications/NotificationBell";
 import "./DashboardHeader.css";
 
 interface DashboardHeaderProps {
@@ -118,10 +120,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     { path: "/actividades", icon: Target, label: "Actividades" },
   ];
 
-  console.log("🔍 Renderizando dropdown, isDropdownOpen:", isDropdownOpen);
-  console.log("🔍 dropdownLinks:", dropdownLinks);
-  console.log("🔍 isAdmin:", isAdmin);
-
   return (
     <header className="dashboard-header">
       <div className="header-container">
@@ -136,8 +134,11 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </div>
         </div>
 
-        {/* Perfil y dropdown */}
+        {/* Perfil y notificaciones */}
         <div className="header-right">
+          {/* 👇 NOTIFICATION BELL AQUÍ */}
+          <NotificationBell />
+          
           <div className="user-profile">
             <div className={`user-avatar ${getRoleColor()}`}>
               {getRoleIcon()}
@@ -177,20 +178,17 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
                   <div className="dropdown-nav-section">
                     <div className="dropdown-nav-label">Navegación</div>
-                    {dropdownLinks.map((link) => {
-                      console.log('🔗 Renderizando link:', link.label) // 👈 LOG AQUÍ
-                      return (
-                        <Link
-                          key={link.path}
-                          to={link.path}
-                          className={`dropdown-nav-item ${isActive(link.path) ? "active" : ""}`}
-                          onClick={() => setIsDropdownOpen(false)}
-                        >
-                          <link.icon className="h-4 w-4" />
-                          <span>{link.label}</span>
-                        </Link>
-                      )
-                    })}
+                    {dropdownLinks.map((link) => (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        className={`dropdown-nav-item ${isActive(link.path) ? "active" : ""}`}
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <link.icon className="h-4 w-4" />
+                        <span>{link.label}</span>
+                      </Link>
+                    ))}
                   </div>
 
                   {isAdmin && (

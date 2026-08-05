@@ -1,73 +1,47 @@
-import React, { useEffect } from 'react'
-import { Bell, Check } from 'lucide-react'
+// components/notifications/NotificationList.tsx
+import React from 'react'
 import { useNotifications } from '../../hooks/useNotifications'
-import { Notification } from '../../types'
+import { NotificationItem } from './NotificationItem'
 import './NotificationList.css'
 
 interface NotificationListProps {
-  onClose?: () => void
+  onClose: () => void
 }
 
 export const NotificationList: React.FC<NotificationListProps> = ({ onClose }) => {
-  const { notifications, loading, cargarNotificaciones, marcarComoLeida, marcarTodasComoLeidas } = useNotifications()
+  const { notifications, loading, marcarComoLeida, marcarTodasComoLeidas } = useNotifications()
 
-  useEffect(() => {
-    cargarNotificaciones()
-  }, [])
-
-  const handleClick = (id: string): void => {
-    marcarComoLeida(id)
-    if (onClose) onClose()
-  }
-
-  const getIcon = (type: string): string => {
-    switch (type) {
-      case 'like': return '❤️'
-      case 'comment': return '💬'
-      case 'prayer': return '🙏'
-      case 'event': return '📅'
-      default: return '🔔'
-    }
-  }
+  const hasUnread = notifications.some(n => !n.isRead)
 
   if (loading) {
-    return <div className="notification-loading">Cargando...</div>
+    return <div className="notification-loading">Cargando notificaciones...</div>
   }
 
   return (
     <div className="notification-list">
       <div className="notification-header">
-        <h3>Notificaciones</h3>
-        {notifications.some((n: Notification) => !n.isRead) && (
-          <button className="btn-mark-all" onClick={marcarTodasComoLeidas}>
-            <Check size={14} /> Marcar todas
+        <h3>🔔 Notificaciones</h3>
+        {hasUnread && (
+          <button 
+            className="mark-all-read-btn" 
+            onClick={marcarTodasComoLeidas}
+          >
+            Marcar todas como leídas
           </button>
         )}
       </div>
 
       {notifications.length === 0 ? (
-        <div className="notification-empty">
-          <Bell size={32} />
-          <p>No tienes notificaciones</p>
-        </div>
+        <p className="notification-empty">No hay notificaciones</p>
       ) : (
         <div className="notification-items">
-          {notifications.map((n: Notification) => (
-            <div 
-              key={n._id} 
-              className={`notification-item ${!n.isRead ? 'unread' : ''}`}
-              onClick={() => handleClick(n._id)}
-            >
-              <div className="notification-icon">{getIcon(n.type)}</div>
-              <div className="notification-content">
-                <div className="notification-title">{n.title}</div>
-                <div className="notification-message">{n.message}</div>
-                <div className="notification-date">
-                  {new Date(n.createdAt).toLocaleDateString()}
-                </div>
-              </div>
-              {!n.isRead && <div className="notification-dot" />}
-            </div>
+          {notifications.map((notification) => (
+            <NotificationItem
+              key={notification._id}
+              notification={notification}
+              onMarkAsRead={marcarComoLeida}
+              onClose={onClose}
+            />
           ))}
         </div>
       )}

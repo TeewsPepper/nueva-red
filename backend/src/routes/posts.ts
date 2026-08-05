@@ -22,7 +22,16 @@ router.get('/', protect, async (_req: AuthRequest, res: Response): Promise<void>
       .sort({ createdAt: -1 })
       .limit(50)
 
-    res.json({ success: true, data: posts })
+    // Convertir a objetos planos para asegurar que commentCount esté presente
+    const postsWithCount = posts.map((post) => {
+      const postObj = post.toObject()
+      return {
+        ...postObj,
+        commentCount: postObj.commentCount || 0
+      }
+    })
+
+    res.json({ success: true, data: postsWithCount })
   } catch (error) {
     console.error('Error al obtener posts:', error)
     res.status(500).json({ success: false, message: 'Error al obtener publicaciones' })
@@ -154,9 +163,7 @@ router.delete('/:id', protect, async (req: AuthRequest, res: Response): Promise<
   }
 })
 
-// ========================================
-// POST /api/posts/:id/like - Dar/Quitar like
-// ========================================
+
 // ========================================
 // POST /api/posts/:id/like - Dar/Quitar like
 // ========================================
@@ -186,7 +193,7 @@ router.post('/:id/like', protect, async (req: AuthRequest, res: Response): Promi
           type: 'like',
           title: 'Nuevo like',
           message: `${user.name} le dio like a tu publicación`,
-          link: `/posts/${post._id}`
+          link: `/feed#post-${post._id}`
         })
 
         // EMITIR NOTIFICACIÓN EN TIEMPO REAL
@@ -194,7 +201,7 @@ router.post('/:id/like', protect, async (req: AuthRequest, res: Response): Promi
           userId: post.author.toString(),
           type: 'like',
           message: `${user.name} le dio like a tu publicación`,
-          link: `/posts/${post._id}`
+          link: `/feed#post-${post._id}`
         })
       }
     }

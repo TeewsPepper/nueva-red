@@ -1,3 +1,4 @@
+// components/feed/PostCard.tsx
 import React, { useState, useEffect } from 'react'
 import { Heart, MessageCircle, Trash2, User, ChevronDown, ChevronUp } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
@@ -19,6 +20,7 @@ interface PostCardProps {
     image?: string
     likes: string[]
     comments: any[]
+    commentCount?: number
     createdAt: string
   }
   onLikeUpdate?: (postId: string, likes: string[]) => void
@@ -34,9 +36,15 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onLikeUpdate }) => {
   const { toggleLike, eliminarPost } = useFeed()
   const { socket } = useSocket()
   
-  // 👇 ESTADO PARA MOSTRAR/OCULTAR COMENTARIOS
   const [showComments, setShowComments] = useState(false)
-  const [commentCount, setCommentCount] = useState(post.comments?.length || 0)
+  
+  // 👈 USAR commentCount del post
+  const commentCount = post.commentCount || post.comments?.length || 0
+
+  // 👈 ACTUALIZAR cuando cambie el post
+  useEffect(() => {
+    console.log(`🔄 [PostCard] ${post._id} - Contador: ${commentCount}`)
+  }, [commentCount, post._id])
   
   const isLiked = post.likes.includes(user?._id || '')
   const isAuthor = post.author._id === user?._id
@@ -78,13 +86,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onLikeUpdate }) => {
     }
   }
 
-  // 👇 FUNCIÓN PARA ABRIR/CERRAR COMENTARIOS
   const toggleComments = () => {
     setShowComments(!showComments)
   }
 
   return (
-    <div className="post-card">
+    <div id={`post-${post._id}`} className="post-card">
       <div className="post-header">
         <div className="post-author">
           <div className="post-avatar">
@@ -130,12 +137,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onLikeUpdate }) => {
         </button>
       </div>
 
-      {/* 👇 COMENTARIOS (se muestran cuando showComments es true) */}
       {showComments && (
         <div className="post-comments">
           <CommentList 
-            postId={post._id} 
-            onCommentCountChange={setCommentCount}
+            postId={post._id}
           />
           <button className="btn-toggle-comments" onClick={toggleComments}>
             <ChevronUp size={16} />
@@ -144,7 +149,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onLikeUpdate }) => {
         </div>
       )}
 
-      {/* 👇 BOTÓN PARA MOSTRAR COMENTARIOS (cuando hay comentarios y está oculto) */}
       {!showComments && commentCount > 0 && (
         <button className="btn-show-comments" onClick={toggleComments}>
           <ChevronDown size={16} />
