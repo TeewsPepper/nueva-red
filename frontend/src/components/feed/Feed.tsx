@@ -22,7 +22,7 @@ export const Feed: React.FC<FeedProps> = ({ location }) => {
     cargarPosts();
   }, []);
 
-  // 👇 SCROLL AL POST DESDE NOTIFICACIÓN
+  // 👇 SCROLL AL POST DESDE NOTIFICACIÓN - CON CLASES CSS
   useEffect(() => {
     if (posts.length === 0 || !location) return;
     if (hasScrolled.current) return;
@@ -39,15 +39,11 @@ export const Feed: React.FC<FeedProps> = ({ location }) => {
             block: "center",
           });
 
-          postElement.style.transition =
-            "background 0.5s ease, box-shadow 0.5s ease";
-          postElement.style.background = "rgba(201, 168, 76, 0.15)";
-          postElement.style.boxShadow = "0 0 20px rgba(201, 168, 76, 0.3)";
-          postElement.style.borderRadius = "12px";
+          // ✅ USAR CLASE CSS EN LUGAR DE ESTILOS EN LÍNEA
+          postElement.classList.add("post-highlight");
 
           setTimeout(() => {
-            postElement.style.background = "transparent";
-            postElement.style.boxShadow = "none";
+            postElement.classList.remove("post-highlight");
           }, 3000);
 
           hasScrolled.current = true;
@@ -74,7 +70,7 @@ export const Feed: React.FC<FeedProps> = ({ location }) => {
     };
   }, [socket, cargarPosts]);
 
-  // 👇 🔥 ESCUCHAR NUEVOS COMENTARIOS - CORREGIDO
+  // 👇 ESCUCHAR NUEVOS COMENTARIOS
   useEffect(() => {
     if (!socket) return;
 
@@ -90,7 +86,7 @@ export const Feed: React.FC<FeedProps> = ({ location }) => {
             return {
               ...post,
               comments: newComments,
-              commentCount: data.totalComments, // 👈 Usar el valor del backend
+              commentCount: data.totalComments,
             };
           }
           return post;

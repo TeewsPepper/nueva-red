@@ -45,3 +45,32 @@ export type AsyncRequestHandler = (
   req: AuthRequest,
   res: Response
 ) => Promise<void>
+
+
+// ========================================
+// TIPOS PARA CLOUDINARY
+// ========================================
+
+export interface CloudinaryUploadResult {
+  secure_url: string
+  public_id: string
+  version: number
+  width: number
+  height: number
+  format: string
+  resource_type: string
+  created_at: string
+  bytes: number
+  url: string
+}
+
+export interface CloudinaryUploadOptions {
+  folder: string
+  resource_type: 'image' | 'video' | 'raw' | 'auto'
+  transformation?: Array<{
+    width?: number
+    height?: number
+    crop?: string
+    quality?: string | number
+  }>
+}

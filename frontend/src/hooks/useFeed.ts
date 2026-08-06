@@ -27,9 +27,21 @@ export const useFeed = () => {
     }
   }, [])
 
-  const crearPost = useCallback(async (content: string, image?: string): Promise<Post | undefined> => {
+  // ✅ MODIFICAR: crearPost ahora recibe File | null
+  const crearPost = useCallback(async (content: string, imageFile: File | null): Promise<Post | undefined> => {
     try {
-      const response = await api.post('/posts', { content, image })
+      const formData = new FormData()
+      formData.append('content', content)
+      if (imageFile) {
+        formData.append('image', imageFile)
+      }
+
+      const response = await api.post('/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
       if (response.data.success) {
         const newPost = response.data.data
         setPosts((prev) => [newPost, ...prev])
@@ -47,7 +59,6 @@ export const useFeed = () => {
     try {
       const response = await api.post(`/posts/${postId}/like`)
       if (response.data.success) {
-        // 👇 ACTUALIZAR LOCALMENTE (el socket también lo hará)
         setPosts((prev) =>
           prev.map((post) =>
             post._id === postId
@@ -75,7 +86,7 @@ export const useFeed = () => {
 
   return { 
     posts, 
-    setPosts,  // 👈 EXPORTAR setPosts
+    setPosts,
     loading, 
     error, 
     cargarPosts, 
