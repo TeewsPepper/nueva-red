@@ -9,6 +9,7 @@ export interface IUser extends Document {
   role: 'pastor' | 'lider' | 'miembro' | 'visitante'
   churchName?: string
   phone?: string
+  profilePicture?: string
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -47,6 +48,11 @@ const UserSchema = new Schema<IUser>(
     phone: {
       type: String,
       trim: true,
+    },
+    profilePicture: {  
+      type: String,
+      trim: true,
+      default: null,
     },
     isActive: {
       type: Boolean,

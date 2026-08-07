@@ -9,6 +9,7 @@ export interface User {
   role: "pastor" | "lider" | "miembro" | "visitante";
   churchName?: string;
   phone?: string;
+  profilePicture?: string | null;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -256,6 +257,7 @@ export interface NotificationsResponse {
 
 export interface AuthContextType {
   user: User | null;
+  setUser: (user: User | null) => void
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;

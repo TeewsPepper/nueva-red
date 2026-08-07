@@ -54,41 +54,60 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const isVisitante = (): boolean => hasRole("visitante");
 
   // Verificar token al cargar
-  useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          const response = await api.get<ApiResponse<User>>("/auth/verify");
-          if (response.data.success) {
-            const userData = response.data.data;
-            if (userData) {
-              setUser(userData);
-              localStorage.setItem("user", JSON.stringify(userData));
-            }
-          } else {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            delete api.defaults.headers.common["Authorization"];
-          }
+ useEffect(() => {
+  const initAuth = async () => {
+    try {
+      // ✅ GUARDAR EL USUARIO DEL LOCALSTORAGE ANTES DE LA VERIFICACIÓN
+      const savedUser = localStorage.getItem("user");
+      let savedProfilePicture: string | null = null;
+      
+      if (savedUser) {
+        try {
+          const parsed = JSON.parse(savedUser);
+          savedProfilePicture = parsed.profilePicture || null;
+          console.log('📸 Foto guardada en localStorage:', savedProfilePicture);
+        } catch {
+          // Ignorar
         }
-      } catch (err) {
-        const apiError = err as ApiError;
-        console.error(
-          "Error al verificar token:",
-          apiError.response?.data?.message,
-        );
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        delete api.defaults.headers.common["Authorization"];
-      } finally {
-        setLoading(false);
       }
-    };
 
-    initAuth();
-  }, []);
+      const token = localStorage.getItem("token");
+      if (token) {
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const response = await api.get<ApiResponse<User>>("/auth/verify");
+        if (response.data.success) {
+          const userData = response.data.data;
+          if (userData) {
+            // ✅ RESTAURAR profilePicture SI EXISTE EN LOCALSTORAGE
+            if (savedProfilePicture) {
+              userData.profilePicture = savedProfilePicture;
+              console.log('📸 Restaurando foto de perfil:', savedProfilePicture);
+            }
+            setUser(userData);
+            localStorage.setItem("user", JSON.stringify(userData));
+          }
+        } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          delete api.defaults.headers.common["Authorization"];
+        }
+      }
+    } catch (err) {
+      const apiError = err as ApiError;
+      console.error(
+        "Error al verificar token:",
+        apiError.response?.data?.message,
+      );
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      delete api.defaults.headers.common["Authorization"];
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  initAuth();
+}, []);
 
   // Login
   const login = async (email: string, password: string) => {
@@ -205,6 +224,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value: AuthContextType = {
     user,
+    setUser,
     loading,
     error,
     login,

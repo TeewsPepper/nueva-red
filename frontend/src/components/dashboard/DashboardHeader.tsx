@@ -1,4 +1,3 @@
-// components/dashboard/DashboardHeader.tsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -41,6 +40,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   const displayRole = user?.role || userRole || "miembro";
   const displayEmail = user?.email || userEmail || "";
   const displayName = user?.name || "Usuario";
+  const displayProfilePicture = user?.profilePicture || null;  // ✅ AGREGAR
 
   const isAdmin = displayRole === "pastor" || displayRole === "lider";
 
@@ -136,12 +136,20 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         {/* Perfil y notificaciones */}
         <div className="header-right">
-          {/* 👇 NOTIFICATION BELL AQUÍ */}
           <NotificationBell />
           
           <div className="user-profile">
+            {/* ✅ AVATAR CON FOTO DE PERFIL */}
             <div className={`user-avatar ${getRoleColor()}`}>
-              {getRoleIcon()}
+              {displayProfilePicture ? (
+                <img
+                  src={displayProfilePicture}
+                  alt={displayName}
+                  className="user-avatar-image"
+                />
+              ) : (
+                getRoleIcon()
+              )}
             </div>
 
             <div className="user-info">
@@ -166,6 +174,20 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               {isDropdownOpen && (
                 <div className="dropdown-menu">
                   <div className="dropdown-header">
+                    {/* ✅ FOTO EN EL DROPDOWN */}
+                    <div className="dropdown-avatar-wrapper">
+                      <div className={`dropdown-avatar ${getRoleColor()}`}>
+                        {displayProfilePicture ? (
+                          <img
+                            src={displayProfilePicture}
+                            alt={displayName}
+                            className="dropdown-avatar-image"
+                          />
+                        ) : (
+                          getRoleIcon()
+                        )}
+                      </div>
+                    </div>
                     <div className="dropdown-user-name">{displayName}</div>
                     <div className="dropdown-user-email">{displayEmail}</div>
                     <div className={`dropdown-role-badge ${getRoleColor()}`}>

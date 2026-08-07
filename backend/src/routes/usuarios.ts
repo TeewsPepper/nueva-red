@@ -1,7 +1,11 @@
 import express from 'express';
 import { protect } from '../middleware/auth.js';
 import { requireRole } from '../middleware/role.js';
-import User, { IUser } from '../models/User.js';  // 👈 IMPORTAR IUser
+import User, { IUser } from '../models/User.js';
+import cloudinary from '../config/cloudinary.js';
+import upload from '../middleware/upload.js';
+import { Readable } from 'stream';
+import { CloudinaryUploadResult } from '../types/index.js';  // ✅ IMPORTAR
 
 const router = express.Router();
 
@@ -10,7 +14,7 @@ router.get(
   '/',
   protect,
   requireRole(['pastor']),
-  async (_req, res) => {  // 👈 _req en lugar de req
+  async (_req, res) => {
     try {
       const usuarios = await User.find()
         .select('-password')
@@ -24,7 +28,7 @@ router.get(
   }
 );
 
-// 👇 AGREGAR ENDPOINT PARA LÍDERES (solicitudes)
+// GET /api/usuarios/lideres - Líderes para solicitudes
 router.get(
   '/lideres',
   protect,
@@ -59,7 +63,6 @@ router.get(
     try {
       const user = req.user as IUser;
       
-      // Solo puedes ver tu propio perfil o ser pastor
       if (user._id.toString() !== req.params.id && user.role !== 'pastor') {
         res.status(403).json({
           success: false,
@@ -75,7 +78,7 @@ router.get(
           success: false, 
           message: 'Usuario no encontrado' 
         });
-        return;  // 👈 AGREGAR RETURN
+        return;
       }
 
       res.json({ success: true, data: usuario });
@@ -89,7 +92,9 @@ router.get(
   }
 );
 
+// ========================================
 // PUT /api/usuarios/:id - Actualizar perfil
+// ========================================
 router.put(
   '/:id',
   protect,
@@ -97,7 +102,6 @@ router.put(
     try {
       const user = req.user as IUser;
       
-      // Solo puedes editar tu propio perfil o ser pastor
       if (user._id.toString() !== req.params.id && user.role !== 'pastor') {
         res.status(403).json({
           success: false,
@@ -106,7 +110,6 @@ router.put(
         return;
       }
 
-      // No permitir cambiar el rol si no es pastor
       if (req.body.role && user.role !== 'pastor') {
         res.status(403).json({
           success: false,
@@ -115,9 +118,39 @@ router.put(
         return;
       }
 
+      // ✅ OBTENER EL USUARIO ACTUAL
+      const usuarioActual = await User.findById(req.params.id);
+      if (!usuarioActual) {
+        res.status(404).json({ 
+          success: false, 
+          message: 'Usuario no encontrado' 
+        });
+        return;
+      }
+
+      // ✅ TIPADO EXPLÍCITO - SIN ANY
+      interface UpdateUserData {
+        name?: string;
+        phone?: string;
+        churchName?: string;
+        profilePicture?: string | null;
+        role?: 'pastor' | 'lider' | 'miembro' | 'visitante';
+      }
+
+      const updateData: UpdateUserData = {
+        name: req.body.name || usuarioActual.name,
+        phone: req.body.phone !== undefined ? req.body.phone : usuarioActual.phone,
+        churchName: req.body.churchName !== undefined ? req.body.churchName : usuarioActual.churchName,
+        profilePicture: usuarioActual.profilePicture,
+      };
+
+      if (req.body.role && user.role === 'pastor') {
+        updateData.role = req.body.role;
+      }
+
       const usuario = await User.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        updateData,
         { new: true, runValidators: true }
       ).select('-password');
       
@@ -135,6 +168,138 @@ router.put(
       res.status(500).json({ 
         success: false, 
         message: 'Error al actualizar usuario' 
+      });
+    }
+  }
+);
+
+// ========================================
+// POST /api/usuarios/:id/profile-picture - Subir foto de perfil
+// ========================================
+router.post(
+  '/:id/profile-picture',
+  protect,
+  upload.single('profilePicture'),
+  async (req, res) => {
+    try {
+      const user = req.user as IUser;
+      
+      if (user._id.toString() !== req.params.id) {
+        res.status(403).json({
+          success: false,
+          message: 'No tienes permiso para cambiar la foto de este perfil'
+        });
+        return;
+      }
+
+      if (!req.file) {
+        res.status(400).json({ 
+          success: false, 
+          message: 'No se envió ninguna imagen' 
+        });
+        return;
+      }
+
+      
+      const result = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'profile_pictures',
+            resource_type: 'image',
+            transformation: [
+              { width: 300, height: 300, crop: 'fill' },
+              { quality: 'auto:best' },
+              { fetch_format: 'auto' },
+              { gravity: 'face' }
+            ]
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result as CloudinaryUploadResult);
+          }
+        );
+
+        const stream = Readable.from(req.file!.buffer);
+        stream.pipe(uploadStream);
+      });
+
+      console.log('✅ Cloudinary result:', result.secure_url);  // ✅ DEBUG
+
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { profilePicture: result.secure_url },
+        { new: true }
+      ).select('-password');
+
+      console.log('✅ Usuario actualizado:', updatedUser);  // ✅ DEBUG
+      
+      if (!updatedUser) {
+        res.status(404).json({ 
+          success: false, 
+          message: 'Usuario no encontrado' 
+        });
+        return;
+      }
+
+      res.json({
+        success: true,
+        data: updatedUser,
+        message: 'Foto de perfil actualizada'
+      });
+
+    } catch (error) {
+      console.error('Error al subir foto de perfil:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al subir la foto de perfil'
+      });
+    }
+  }
+);
+
+// ========================================
+// DELETE /api/usuarios/:id/profile-picture - Eliminar foto de perfil
+// ========================================
+router.delete(
+  '/:id/profile-picture',
+  protect,
+  async (req, res) => {
+    try {
+      const user = req.user as IUser;
+      
+      if (user._id.toString() !== req.params.id) {
+        res.status(403).json({
+          success: false,
+          message: 'No tienes permiso para eliminar la foto de este perfil'
+        });
+        return;
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { profilePicture: null },
+        { new: true }
+      ).select('-password');
+
+      if (!updatedUser) {
+        res.status(404).json({ 
+          success: false, 
+          message: 'Usuario no encontrado' 
+        });
+        return;
+      }
+
+      res.json({
+        success: true,
+        data: updatedUser,
+        message: 'Foto de perfil eliminada'
+      });
+
+    } catch (error) {
+      console.error('Error al eliminar foto de perfil:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al eliminar la foto de perfil'
       });
     }
   }
