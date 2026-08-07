@@ -1,9 +1,4 @@
-# Proyecto Iglesia - API Backend
 
-Resumen de las funcionalidades implementadas en el backend.
-
-## Resumen
-Esta API está pensada para una aplicación de gestión y comunidad de iglesia. Implementa autenticación, roles, feed social (posts y comentarios), notificaciones en tiempo real con Socket.io, ministerios, eventos, tareas, actividades (break), solicitudes de ministerio y pedidos de oración.
 
 ## Principales recursos y endpoints (base: `/api`)
 
