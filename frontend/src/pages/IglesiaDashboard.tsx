@@ -23,10 +23,6 @@ import {
   CheckSquare,
   Target,
   Mail,
-  Crown,
-  Star,
-  User as UserIcon,
-  Eye,
   Lock,
 } from "lucide-react";
 
@@ -275,45 +271,6 @@ export const IglesiaDashboard = () => {
       />
 
       <div className="dashboard-content">
-        {/* Stats */}
-        {/* <section className="stats-grid">
-          <div className="stat-card">
-            <span className="stat-number">{ministerios.length}</span>
-            <span className="stat-label">Ministerios</span>
-            {canCreateMinisterio() && (
-              <span className="stat-badge">Puedes crear</span>
-            )}
-          </div>
-          <div className="stat-card">
-            <span className="stat-number">{eventos.length}</span>
-            <span className="stat-label">Eventos</span>
-            {canCreateEvento() && (
-              <span className="stat-badge">Puedes crear</span>
-            )}
-          </div>
-          <div className="stat-card">
-            <span className="stat-number">
-              {tareas.filter((t) => !t.completada).length}
-            </span>
-            <span className="stat-label">Tareas pendientes</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-number">{actividades.length}</span>
-            <span className="stat-label">Actividades</span>
-          </div>
-        </section> */}
-
-        {/* Role indicator */}
-        <div className="role-indicator">
-          <span className="role-label">Tu rol:</span>
-          <span className={`role-badge role-${user.role}`}>
-            {user.role === "pastor" && <Crown size={14} />}
-            {user.role === "lider" && <Star size={14} />}
-            {user.role === "miembro" && <UserIcon size={14} />}
-            {user.role === "visitante" && <Eye size={14} />}
-            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-          </span>
-        </div>
 
         {/* Tabs */}
         <div className="tabs">
