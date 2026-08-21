@@ -13,25 +13,22 @@ import { SolicitudesPanel } from "../components/dashboard/Solicitudes/Solicitude
 import { useToast } from "../hooks/useToast";
 import { Toast } from "../components/common/Toast";
 import { Ministerio, Evento, Tarea, BreakActivity, ApiError } from "../types";
-
+import { Feed } from "../components/feed/Feed";
+import { RolesPanel } from "../components/dashboard/Roles/RolesPanel";
+import { Home, Shield } from "lucide-react";
 import api from "../services/api";
 import "./IglesiaDashboard.css";
 
-import {
-  Users,
-  Calendar,
-  CheckSquare,
-  Target,
-  Mail,
-  Lock,
-} from "lucide-react";
+import { Users, Calendar, CheckSquare, Target, Mail, Lock } from "lucide-react";
 
 type TabType =
   | "ministerios"
   | "eventos"
   | "tareas"
   | "actividades"
-  | "solicitudes";
+  | "solicitudes"
+  | "muro"
+  | "roles";
 
 type TabConfig = {
   id: TabType;
@@ -79,8 +76,14 @@ export const IglesiaDashboard = () => {
       { id: "eventos", label: "Eventos", icon: Calendar },
       { id: "tareas", label: "Tareas", icon: CheckSquare },
       { id: "actividades", label: "Actividades", icon: Target },
+      { id: "muro", label: "Muro", icon: Home }, // 👈 NUEVO
       { id: "solicitudes", label: "Solicitudes", icon: Mail },
     ];
+
+    // 👇 SOLO PASTORES VEN LA PESTAÑA DE ROLES
+    if (user?.role === "pastor") {
+      tabs.push({ id: "roles", label: "Roles", icon: Shield });
+    }
 
     return tabs;
   };
@@ -271,7 +274,6 @@ export const IglesiaDashboard = () => {
       />
 
       <div className="dashboard-content">
-
         {/* Tabs */}
         <div className="tabs">
           {getAvailableTabs().map((tab) => (
@@ -450,6 +452,20 @@ export const IglesiaDashboard = () => {
                 console.log("Solicitud creada, recargando...");
               }}
             />
+          )}
+
+          
+          {activeTab === "muro" && (
+            <div className="tab-muro">
+              <Feed />
+            </div>
+          )}
+
+          
+          {activeTab === "roles" && user?.role === "pastor" && (
+            <div className="tab-roles">
+              <RolesPanel />
+            </div>
           )}
         </div>
       </div>

@@ -5,11 +5,13 @@ import User, { IUser } from '../models/User.js';
 import cloudinary from '../config/cloudinary.js';
 import upload from '../middleware/upload.js';
 import { Readable } from 'stream';
-import { CloudinaryUploadResult } from '../types/index.js';  // ✅ IMPORTAR
+import { CloudinaryUploadResult } from '../types/index.js';
 
 const router = express.Router();
 
+// ========================================
 // GET /api/usuarios - Solo pastor (ver todos los miembros)
+// ========================================
 router.get(
   '/',
   protect,
@@ -28,7 +30,9 @@ router.get(
   }
 );
 
+// ========================================
 // GET /api/usuarios/lideres - Líderes para solicitudes
+// ========================================
 router.get(
   '/lideres',
   protect,
@@ -55,7 +59,9 @@ router.get(
   }
 );
 
+// ========================================
 // GET /api/usuarios/:id - Usuarios pueden ver su propio perfil
+// ========================================
 router.get(
   '/:id',
   protect,
@@ -118,7 +124,7 @@ router.put(
         return;
       }
 
-      // ✅ OBTENER EL USUARIO ACTUAL
+      // OBTENER EL USUARIO ACTUAL
       const usuarioActual = await User.findById(req.params.id);
       if (!usuarioActual) {
         res.status(404).json({ 
@@ -128,7 +134,7 @@ router.put(
         return;
       }
 
-      // ✅ TIPADO EXPLÍCITO - SIN ANY
+      // TIPADO EXPLÍCITO
       interface UpdateUserData {
         name?: string;
         phone?: string;
@@ -174,6 +180,70 @@ router.put(
 );
 
 // ========================================
+// PATCH /api/usuarios/:id/rol - Actualizar rol (SOLO PASTOR)
+// ========================================
+router.patch(
+  '/:id/rol',
+  protect,
+  requireRole(['pastor']),
+  async (req, res) => {
+    try {
+      const { rol } = req.body;
+      const user = req.user as IUser;
+      
+      // Validar que el rol sea válido
+      const rolesValidos = ['pastor', 'lider', 'miembro', 'visitante'];
+      if (!rol || !rolesValidos.includes(rol)) {
+        res.status(400).json({
+          success: false,
+          message: `Rol inválido. Debe ser uno de: ${rolesValidos.join(', ')}`
+        });
+        return;
+      }
+
+      // Verificar que el usuario existe
+      const usuario = await User.findById(req.params.id);
+      if (!usuario) {
+        res.status(404).json({
+          success: false,
+          message: 'Usuario no encontrado'
+        });
+        return;
+      }
+
+      // No permitir cambiar el propio rol (evitar que un pastor se quite permisos)
+      if (user._id.toString() === req.params.id) {
+        res.status(403).json({
+          success: false,
+          message: 'No puedes cambiar tu propio rol'
+        });
+        return;
+      }
+
+      // Actualizar solo el rol
+      const usuarioActualizado = await User.findByIdAndUpdate(
+        req.params.id,
+        { role: rol },
+        { new: true, runValidators: true }
+      ).select('-password');
+
+      res.json({
+        success: true,
+        data: usuarioActualizado,
+        message: `Rol actualizado a ${rol}`
+      });
+
+    } catch (error) {
+      console.error('Error al actualizar rol:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al actualizar el rol del usuario'
+      });
+    }
+  }
+);
+
+// ========================================
 // POST /api/usuarios/:id/profile-picture - Subir foto de perfil
 // ========================================
 router.post(
@@ -200,7 +270,6 @@ router.post(
         return;
       }
 
-      
       const result = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
@@ -223,7 +292,7 @@ router.post(
         stream.pipe(uploadStream);
       });
 
-      console.log('✅ Cloudinary result:', result.secure_url);  // ✅ DEBUG
+      console.log('✅ Cloudinary result:', result.secure_url);
 
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
@@ -231,7 +300,7 @@ router.post(
         { new: true }
       ).select('-password');
 
-      console.log('✅ Usuario actualizado:', updatedUser);  // ✅ DEBUG
+      console.log('✅ Usuario actualizado:', updatedUser);
       
       if (!updatedUser) {
         res.status(404).json({ 

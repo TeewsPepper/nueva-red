@@ -19,7 +19,7 @@ export const FeedPage: React.FC = () => {
       
       <div className="feed-page-content">
         <div className="feed-page-header">
-          <h1>📱 Muro de la Iglesia</h1>
+          <h1>📱 Muro de la Organización</h1>
           <p>Comparte noticias, oraciones y testimonios con tu comunidad</p>
         </div>
         

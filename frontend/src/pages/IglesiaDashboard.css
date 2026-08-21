@@ -895,3 +895,72 @@
     color: #c9a84c;
   }
 }
+/* ====== AGREGAR AL FINAL DEL ARCHIVO ====== */
+
+/* Estilos para el Muro dentro del Dashboard */
+.tab-muro {
+  padding: 0;
+}
+
+.tab-muro .feed {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.tab-muro .feed-posts {
+  margin-top: 0;
+}
+
+.tab-muro .post-form {
+  margin-bottom: 1.5rem;
+}
+
+.tab-muro .post-form textarea {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.tab-muro .post-form textarea:focus {
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+/* Estilos para la pestaña de Roles */
+.tab-roles {
+  padding: 0;
+}
+
+/* Asegurar que el contenido no se corte */
+.dashboard-content {
+  overflow-y: auto;
+  flex: 1;
+  padding: 1.5rem 2rem;
+}
+
+/* Modo oscuro para los nuevos elementos */
+@media (prefers-color-scheme: dark) {
+  .tab-muro .post-form textarea {
+    background: #0f0f1a;
+    border-color: #2a2a4a;
+    color: #e5e7eb;
+  }
+
+  .tab-muro .post-form textarea:focus {
+    border-color: #c9a84c;
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 0.75rem;
+  }
+}
